@@ -54,6 +54,11 @@
       };
     };
 
+    prismlauncher = {
+      url = "github:Diegiwg/PrismLauncher-Cracked";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     spicetify-nix = {
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -91,24 +96,28 @@
         inputs.flake-programs-sqlite.nixosModules.programs-sqlite
         inputs.home-manager.nixosModules.home-manager
         inputs.impermanence.nixosModules.impermanence
-        inputs.nixvim.nixosModules.nixvim
         inputs.stylix.nixosModules.stylix
 
-        {
-          home-manager.sharedModules = [
-            inputs.plasma-manager.homeModules.plasma-manager
-            inputs.spicetify-nix.homeManagerModules.default
-          ];
-        }
+        ./modules/nixos
+        ./hardware-configuration.nix
 
-        ./configuration.nix
+        {
+          home-manager = {
+            sharedModules = [
+              inputs.plasma-manager.homeModules.plasma-manager
+              inputs.spicetify-nix.homeManagerModules.default
+              inputs.nixvim.homeModules.nixvim
+            ];
+            users.${globals.username} = ./modules/home;
+          };
+        }
       ];
 
       specialArgs = {inherit inputs outputs globals;};
     };
 
     packages.${globals.system}.neovim =
-      inputs.nixvim.legacyPackages.${globals.system}.makeNixvim ./modules/nixos/nixvim/modules;
+      inputs.nixvim.legacyPackages.${globals.system}.makeNixvim ./modules/nixvim;
 
     templates.python = {
       path = ./templates/python;

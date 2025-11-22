@@ -1,3 +1,0 @@
-{
-  plugins.csvview.enable = true;
-}

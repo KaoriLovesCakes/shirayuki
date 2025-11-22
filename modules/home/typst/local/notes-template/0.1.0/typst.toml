@@ -1,7 +1,0 @@
-[package]
-name = "notes-template"
-version = "0.1.0"
-entrypoint = "lib.typ"
-authors = ["KaoriLovesCakes"]
-license = "MIT"
-description = "My notes template."

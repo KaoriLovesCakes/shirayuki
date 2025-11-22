@@ -1,0 +1,27 @@
+{
+  imports = [
+    ./luasnip
+    ./better-escape.nix
+    ./blink-cmp.nix
+    ./colorizer.nix
+    ./comment.nix
+    ./competitest.nix
+    ./conform-nvim.nix
+    ./extraPlugins.nix
+    ./friendly-snippets.nix
+    ./guess-indent.nix
+    ./leap.nix
+    ./lspconfig.nix
+    ./lualine.nix
+    ./mini.nix
+    ./noice.nix
+    ./nvim-autopairs.nix
+    ./nvim-surround.nix
+    ./oil.nix
+    ./snacks.nix
+    ./telescope.nix
+    ./transparent.nix
+    ./treesitter.nix
+    ./which-key.nix
+  ];
+}

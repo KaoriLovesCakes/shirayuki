@@ -1,4 +1,4 @@
-#import "@preview/down:0.1.0": *
+// #import "@preview/down:0.1.0": *
 #import "@preview/physica:0.9.5": *
 #import "@preview/rubber-article:0.5.0": *
 #import "@preview/suiji:0.4.0": *

@@ -2,12 +2,14 @@
   pkgs,
   globals,
   ...
-}: {
-  home.packages = [pkgs.rclone];
+}:
+{
+  home.packages = with pkgs; [ rclone ];
+
   systemd.user.services.rclone-mount-all = {
-    Install.WantedBy = ["default.target"];
+    Install.WantedBy = [ "default.target" ];
     Service = {
-      Environment = ["PATH=/run/wrappers/bin/:$PATH"];
+      Environment = [ "PATH=/run/wrappers/bin/:$PATH" ];
       ExecStartPre = ''
         ${pkgs.writeShellScript "rclone-mount-all-start-pre" ''
           remotes=$(${pkgs.rclone}/bin/rclone listremotes)
@@ -41,7 +43,7 @@
       Type = "forking";
     };
     Unit = {
-      After = ["network-online.target"];
+      After = [ "network-online.target" ];
       Description = "Mount all rclone configs.";
     };
   };

@@ -2,7 +2,8 @@
   globals,
   lib,
   ...
-}: {
+}:
+{
   boot = {
     initrd.postDeviceCommands = lib.mkAfter ''
       mkdir /btrfs_tmp
@@ -63,7 +64,7 @@
           };
           root = {
             name = "root";
-            size = "384G";
+            size = "100%";
             content = {
               type = "lvm_pv";
               vg = "root_vg";
@@ -80,18 +81,26 @@
             size = "100%FREE";
             content = {
               type = "btrfs";
-              extraArgs = ["-f"];
+              extraArgs = [ "-f" ];
               subvolumes = {
                 "/root" = {
-                  mountOptions = ["compress=zstd"];
+                  mountOptions = [ "compress=zstd" ];
                   mountpoint = "/";
                 };
                 "/persist" = {
-                  mountOptions = ["subvol=persist" "compress=zstd" "noatime"];
+                  mountOptions = [
+                    "subvol=persist"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                   mountpoint = "/persist";
                 };
                 "/nix" = {
-                  mountOptions = ["subvol=nix" "compress=zstd" "noatime"];
+                  mountOptions = [
+                    "subvol=nix"
+                    "compress=zstd"
+                    "noatime"
+                  ];
                   mountpoint = "/nix";
                 };
               };
@@ -106,43 +115,36 @@
     hideMounts = true;
     directories = [
       "/etc"
-      "/var/log"
       "/var/lib/bluetooth"
+      "/var/lib/docker"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
       "/var/lib/tailscale"
+      "/var/log"
     ];
     users.${globals.username} = {
       directories = [
         ".config/BetterDiscord"
-        ".config/Caprine"
         ".config/discord"
-        ".config/libreoffice"
         ".config/nix"
-        ".config/qBittorrent"
         ".config/rclone"
         ".config/spotify"
         ".local/share/Anki2"
         ".local/share/PrismLauncher"
         ".local/share/Steam"
+        ".local/share/cargo-compete"
         ".local/share/direnv"
+        ".local/share/docker"
         ".local/share/fish"
         ".local/share/fonts"
         ".local/share/honkers-railway-launcher"
-        ".local/share/kwalletd"
-        ".local/share/qBittorrent"
-        ".ollama"
         ".ssh"
         ".steam"
         ".zen"
-        "Desktop"
-        "Documents"
         "Downloads"
-        "Music"
+        "Media"
         "Notes"
-        "Pictures"
         "Repositories"
-        "Videos"
         "Virtualisation"
       ];
     };

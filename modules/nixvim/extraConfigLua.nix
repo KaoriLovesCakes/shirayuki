@@ -13,9 +13,5 @@
     })
 
     require("lorem").opts({})
-
-    require("substitute").setup({})
-
-    require("venv-selector").setup({})
   '';
 }

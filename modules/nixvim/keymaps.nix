@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   keymaps = [
     {
       action = "<gv";
@@ -38,45 +39,13 @@
     }
 
     {
-      action = lib.nixvim.mkRaw ''
-        function()
-          if vim.wo.conceallevel == 0 then
-            vim.wo.conceallevel = 2
-          else
-            vim.wo.conceallevel = 0
-          end
-        end
-      '';
-
-      key = "<Leader>tc";
+      action = lib.nixvim.mkRaw "require('dapui').toggle";
+      key = "<Leader>d";
       mode = "n";
       options = {
+        buffer = true;
+        desc = "DAP UI";
         noremap = true;
-        desc = "Toggle conceal";
-      };
-    }
-
-    {
-      action = lib.nixvim.mkRaw ''
-        function()
-          vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-        end
-      '';
-      key = "<Leader>td";
-      mode = "n";
-      options = {
-        noremap = true;
-        desc = "Toggle diagnostic";
-      };
-    }
-
-    {
-      action = "<Cmd>set number!<CR>";
-      key = "<Leader>tn";
-      mode = "n";
-      options = {
-        noremap = true;
-        desc = "Toggle number";
       };
     }
 
@@ -86,7 +55,7 @@
       mode = "n";
       options = {
         noremap = true;
-        desc = "Open Oil";
+        desc = "Oil";
       };
     }
 
@@ -99,8 +68,8 @@
       key = "<Leader>pf";
       mode = "n";
       options = {
-        noremap = true;
         desc = "Files";
+        noremap = true;
       };
     }
 
@@ -113,8 +82,8 @@
       key = "<Leader>pl";
       mode = "n";
       options = {
-        noremap = true;
         desc = "Lines";
+        noremap = true;
       };
     }
 
@@ -127,18 +96,18 @@
       key = "<Leader>pg";
       mode = "n";
       options = {
-        noremap = true;
         desc = "Grep";
+        noremap = true;
       };
     }
 
     {
       action = lib.nixvim.mkRaw "require('floaterm').toggle";
-      key = "<Leader>tt";
+      key = "<Leader>t";
       mode = "n";
       options = {
+        desc = "Terminal";
         noremap = true;
-        desc = "Toggle terminal";
       };
     }
 

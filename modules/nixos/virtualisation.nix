@@ -1,5 +1,15 @@
-{pkgs, ...}: {
-  environment.systemPackages = [pkgs.quickemu];
+{ pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [ quickemu ];
   services.usbmuxd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
+  virtualisation = {
+    docker = {
+      enable = true;
+      rootless = {
+        enable = true;
+        setSocketVariable = true;
+      };
+    };
+    spiceUSBRedirection.enable = true;
+  };
 }

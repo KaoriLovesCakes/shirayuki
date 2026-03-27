@@ -1,11 +1,20 @@
 {
   globals,
   pkgs,
+
+  config,
+  lib,
   ...
-}: {
+}:
+{
+  programs.plasma.startup.desktopScript."panels".preCommands = lib.mkForce ''
+    sleep 3
+    [ -f ${config.xdg.configHome}/plasma-org.kde.plasma.desktop-appletsrc ] && rm ${config.xdg.configHome}/plasma-org.kde.plasma.desktop-appletsrc        
+  '';
+
   home = {
     file.".config/kwinoutputconfig.json".source = ./kwinoutputconfig.json;
-    packages = [pkgs.kdePackages.krohnkite];
+    packages = with pkgs; [ kdePackages.krohnkite ];
   };
 
   programs.plasma = {
@@ -30,9 +39,9 @@
           screenGapBottom = 12;
           screenGapLeft = 12;
           screenGapRight = 12;
-          screenGapTop = 12;
+          screenGapTop = 0;
         };
-        Wayland.InputMethod = "/run/current-system/sw/share/applications/org.fcitx.Fcitx5.desktop";
+        Wayland.InputMethod = "/home/${globals.username}/.nix-profile/share/applications/org.fcitx.Fcitx5.desktop";
         Windows = {
           DelayFocusInterval = 0;
           FocusPolicy = "FocusFollowsMouse";
@@ -66,6 +75,7 @@
     panels = [
       {
         floating = true;
+        height = 44;
         hiding = "autohide";
       }
     ];
@@ -73,11 +83,12 @@
     powerdevil.AC = {
       autoSuspend.action = "nothing";
       dimDisplay.enable = false;
+      inhibitLidActionWhenExternalMonitorConnected = true;
       turnOffDisplay.idleTimeout = "never";
     };
 
     shortcuts = {
-      ksmserver."Lock Session" = [];
+      ksmserver."Lock Session" = [ ];
       kwin = {
         "KrohnkiteFocusDown" = "Meta+J";
         "KrohnkiteFocusLeft" = "Meta+H";
@@ -91,9 +102,11 @@
         "Window One Desktop Up" = "Meta+Alt+Shift+K";
         "Window One Desktop to the Left" = "Meta+Alt+Shift+H";
         "Window One Desktop to the Right" = "Meta+Alt+Shift+L";
+        "Walk Through Windows of Current Application" = "Meta+`";
+        "Walk Through Windows of Current Application (Reverse)" = "Meta+~";
       };
-      "KDE Keyboard Layout Switcher"."Switch to Last-Used Keyboard Layout" = [];
-      "KDE Keyboard Layout Switcher"."Switch to Next Keyboard Layout" = [];
+      "KDE Keyboard Layout Switcher"."Switch to Last-Used Keyboard Layout" = [ ];
+      "KDE Keyboard Layout Switcher"."Switch to Next Keyboard Layout" = [ ];
     };
 
     window-rules = [
@@ -122,22 +135,20 @@
   };
 
   systemd.user.services.ksshaskpass-start = {
-    Install.WantedBy = ["plasma-workspace.target"];
+    Install.WantedBy = [ "plasma-workspace.target" ];
     Service = {
       ExecStart = ''
-        ${
-          pkgs.writeShellScript "ksshaskpass-start" ''
-            #!${pkgs.bash}/bin/bash
+        ${pkgs.writeShellScript "ksshaskpass-start" ''
+          #!${pkgs.bash}/bin/bash
 
-            SSH_ASKPASS=${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass ${pkgs.openssh}/bin/ssh-add < /dev/null
-            ${pkgs.openssh}/bin/ssh-add /home/${globals.username}/.ssh/id_ed25519
-          ''
-        }
+          SSH_ASKPASS=${pkgs.kdePackages.ksshaskpass}/bin/ksshaskpass ${pkgs.openssh}/bin/ssh-add < /dev/null
+          ${pkgs.openssh}/bin/ssh-add /home/${globals.username}/.ssh/id_ed25519
+        ''}
       '';
       Restart = "on-failure";
     };
     Unit = {
-      After = ["plasma-workspace.target"];
+      After = [ "plasma-workspace.target" ];
       Description = "Starts ksshaskpass.";
     };
   };

@@ -1,19 +1,14 @@
-{pkgs, ...}: {
-  home.packages = [pkgs.qbittorrent];
-  systemd.user.services.qbittorrent-start = {
-    Install.WantedBy = ["default.target"];
-    Service = {
-      ExecStart = ''
-        ${
-          pkgs.writeShellScript "qbittorrent-start" ''
-            #!${pkgs.bash}/bin/bash
+{ pkgs, ... }:
+{
+  home.packages = with pkgs; [ qbittorrent ];
 
-            ${pkgs.qbittorrent}/bin/qbittorrent
-          ''
-        }
-      '';
+  systemd.user.services.qbittorrent-start = {
+    Install.WantedBy = [ "graphical-session.target" ];
+    Service = {
+      ExecStart = "${pkgs.qbittorrent}/bin/qbittorrent";
       Restart = "on-failure";
+      RestartSec = "5";
     };
-    Unit.Description = "Starts qBittorrent.";
+    Unit.Description = "Start qBittorrent.";
   };
 }

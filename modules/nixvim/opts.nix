@@ -12,6 +12,7 @@
       trail = "•";
       nbsp = "␣";
     };
+    number = true;
     showbreak = "↪ ";
     showmode = false;
     signcolumn = "number";

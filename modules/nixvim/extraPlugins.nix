@@ -2,7 +2,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   extraPlugins = lib.flatten [
     (
       (pkgs.vimUtils.buildVimPlugin {
@@ -11,10 +12,11 @@
           owner = "nvzone";
           repo = "floaterm";
           rev = "HEAD";
-          hash = "sha256-U5AFkHUmDlcjb2WlgdM7d2t9xpeyh9CS9EonAlxwHDw=";
+          hash = "sha256-kTjE44pp02ZEJUp42p459l4WQA8oQ9SU8AuCxXFYm/k=";
         };
-      }).overrideAttrs {
-        dependencies = [pkgs.vimPlugins.nvzone-volt];
+      }).overrideAttrs
+      {
+        dependencies = [ pkgs.vimPlugins.nvzone-volt ];
       }
     )
     (pkgs.vimUtils.buildVimPlugin {
@@ -26,19 +28,5 @@
         hash = "sha256-1tTFCR5mNE29nEqi3u7GcsXprkwKgGuilrSl94I6WY0=";
       };
     })
-    (
-      (pkgs.vimUtils.buildVimPlugin {
-        name = "venv-selector";
-        src = pkgs.fetchFromGitHub {
-          owner = "linux-cultist";
-          repo = "venv-selector.nvim";
-          rev = "HEAD";
-          hash = "sha256-+0bpYcb+sHzcxHxBLzNzeSFqk+hfkPhfmp0yxjuhbg4=";
-        };
-      }).overrideAttrs {
-        dependencies = [pkgs.vimPlugins.telescope-nvim];
-      }
-    )
-    pkgs.vimPlugins.substitute-nvim
   ];
 }

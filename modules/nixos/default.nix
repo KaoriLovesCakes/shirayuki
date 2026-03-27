@@ -1,119 +1,80 @@
 {
-  config,
   globals,
   inputs,
   lib,
   pkgs,
   ...
-}: {
-  systemd.user.services.orca.wantedBy = lib.mkForce [];
-
+}:
+{
   imports = [
-    # ./cloudflare-warp.nix
     ./disk.nix
     ./stylix.nix
     ./virtualisation.nix
   ];
 
-  fonts.packages = [
-    pkgs.nerd-fonts.jetbrains-mono
-    pkgs.newcomputermodern
-    pkgs.source-han-sans
-    pkgs.source-han-serif
+  fonts.packages = with pkgs; [
+    feather
+    nerd-fonts.jetbrains-mono
+    newcomputermodern
+    source-han-sans
+    source-han-serif
+    udev-gothic-nf
   ];
 
   hardware = {
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
-    };
+    bluetooth.enable = true;
     graphics.enable = true;
     nvidia = {
       modesetting.enable = true;
-      powerManagement = {
-        enable = true;
-        finegrained = true;
-      };
-      open = false;
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
+      open = true;
+      powerManagement.enable = true;
       prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
+        offload.enable = true;
       };
     };
   };
 
   home-manager = {
     backupFileExtension = "backup";
-    extraSpecialArgs = {inherit globals inputs pkgs;};
+    extraSpecialArgs = { inherit globals inputs pkgs; };
     useGlobalPkgs = true;
   };
 
   i18n = {
+    extraLocales = [ "ja_JP.UTF-8/UTF-8" ];
     extraLocaleSettings.LC_TIME = "ja_JP.UTF-8";
-    inputMethod = {
-      enable = true;
-      fcitx5 = {
-        addons = [
-          pkgs.fcitx5-bamboo
-          pkgs.fcitx5-mozc
-        ];
-        settings = {
-          globalOptions = {
-            "Hotkey/TriggerKeys"."0" = "";
-            "Hotkey/AltTriggerKeys"."0" = "";
-          };
-          inputMethod = {
-            "Groups/0" = {
-              "Default Layout" = "us-altgr-intl";
-              DefaultIM = "keyboard-us-altgr-intl";
-              Name = "Default";
-            };
-            "Groups/0/Items/0".Name = "keyboard-us-altgr-intl";
-            "Groups/0/Items/1".Name = "mozc";
-            "Groups/0/Items/2".Name = "bamboo";
-          };
-        };
-        waylandFrontend = true;
-      };
-      type = "fcitx5";
-    };
   };
 
   networking = {
     hostName = globals.hostname;
-    networkmanager = {
-      enable = true;
-      insertNameservers = ["8.8.8.8" "8.8.4.4"];
-    };
+    networkmanager.enable = true;
   };
 
   nix = {
+    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
     optimise.automatic = true;
-    settings =
-      lib.recursiveUpdate {
-        auto-optimise-store = true;
-        connect-timeout = 0;
-        experimental-features = [
-          "flakes"
-          "nix-command"
-        ];
-        trusted-users = ["root" globals.username];
-      }
-      inputs.aagl-gtk-on-nix.nixConfig;
+    settings = lib.recursiveUpdate {
+      auto-optimise-store = true;
+      connect-timeout = 0;
+      experimental-features = [
+        "flakes"
+        "nix-command"
+      ];
+      trusted-users = [
+        "root"
+        globals.username
+      ];
+    } inputs.aagl-gtk-on-nix.nixConfig;
   };
 
   nixpkgs = {
-    config.allowUnfreePredicate = pkg:
+    config.allowUnfreePredicate =
+      pkg:
       builtins.elem (lib.getName pkg) [
         # "cloudflare-warp"
         "discord"
-        "minecraft-server"
         "nvidia-persistenced"
         "nvidia-settings"
         "nvidia-x11"
@@ -121,7 +82,6 @@
         "spotify"
         "steam"
         "steam-unwrapped"
-        "vscode"
       ];
     overlays = [
       inputs.nix-alien.overlays.default
@@ -139,9 +99,10 @@
     command-not-found.enable = true;
     fish.enable = true;
     honkers-railway-launcher.enable = true;
-    partition-manager.enable = true;
-    ssh.startAgent = true;
-    steam.enable = true;
+    hyprland = {
+      enable = true;
+      withUWSM = true;
+    };
     nh = {
       enable = true;
       clean = {
@@ -151,6 +112,10 @@
       };
       flake = "/home/${globals.username}/Repositories/${globals.hostname}";
     };
+    partition-manager.enable = true;
+    ssh.startAgent = true;
+    steam.enable = true;
+    uwsm.enable = true;
   };
 
   security.sudo.extraConfig = ''
@@ -158,7 +123,6 @@
   '';
 
   services = {
-    desktopManager.plasma6.enable = true;
     displayManager.ly.enable = true;
     automatic-timezoned.enable = true;
     openssh.enable = true;
@@ -173,11 +137,14 @@
     tailscale.enable = true;
     xserver = {
       enable = true;
-      videoDrivers = ["nvidia"];
+      videoDrivers = [
+        "modesetting"
+        "nvidia"
+      ];
     };
   };
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "26.05";
 
   users = {
     defaultUserShell = pkgs.fish;

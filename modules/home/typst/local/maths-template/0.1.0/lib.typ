@@ -1,10 +1,8 @@
-// #import "@preview/down:0.1.0": *
 #import "@preview/physica:0.9.5": *
 #import "@preview/rubber-article:0.5.0": *
 #import "@preview/suiji:0.4.0": *
 #import "@preview/thmbox:0.2.0": *
 #import "@preview/unify:0.7.1": *
-
 
 
 #let get-thmbox(variant) = {

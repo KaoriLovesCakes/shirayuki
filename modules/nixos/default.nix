@@ -98,7 +98,7 @@
     };
     command-not-found.enable = true;
     fish.enable = true;
-    honkers-railway-launcher.enable = true;
+    # honkers-railway-launcher.enable = true;
     hyprland = {
       enable = true;
       withUWSM = true;

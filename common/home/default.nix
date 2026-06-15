@@ -52,11 +52,11 @@
         addons.xcb.globalSection."Allow Overriding System XKB Settings" = "True";
         inputMethod = {
           "Groups/0" = {
-            DefaultIM = "keyboard-us";
+            DefaultIM = "keyboard-us-altgr-intl";
             "Default Layout" = "us";
             Name = "Default";
           };
-          "Groups/0/Items/0".Name = "keyboard-us";
+          "Groups/0/Items/0".Name = "keyboard-us-altgr-intl";
           "Groups/0/Items/1".Name = "bamboo";
           "Groups/0/Items/2".Name = "mozc";
         };

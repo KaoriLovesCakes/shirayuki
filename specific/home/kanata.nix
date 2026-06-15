@@ -31,8 +31,8 @@
             )
 
             (defvirtualkeys
-              jp (cmd ${bash} -c "${fcitx5-remote} -n | ${grep} -q 'keyboard-us' && ${fcitx5-remote} -s mozc || ${fcitx5-remote} -s keyboard-us")
-              vn (cmd ${bash} -c "${fcitx5-remote} -n | ${grep} -q 'keyboard-us' && ${fcitx5-remote} -s bamboo || ${fcitx5-remote} -s keyboard-us")
+              jp (cmd ${bash} -c "${fcitx5-remote} -n | ${grep} -q 'keyboard-us-altgr-intl' && ${fcitx5-remote} -s mozc || ${fcitx5-remote} -s keyboard-us-altgr-intl")
+              vn (cmd ${bash} -c "${fcitx5-remote} -n | ${grep} -q 'keyboard-us-altgr-intl' && ${fcitx5-remote} -s bamboo || ${fcitx5-remote} -s keyboard-us-altgr-intl")
             )
 
             (defalias
